@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+function formatDate(date: Date) {
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                  'July', 'August', 'September', 'October', 'November', 'December'];
+  return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+}
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <Header />
+
+  <!-- System Info -->
+  <div class="sysinfo">
+    <span><span class="cyan">SysOp:</span> <span class="yellow">Sean Elliot</span></span>
+    <span><span class="cyan">Node:</span> <span class="lt-green">1 of 1</span></span>
+    <span><span class="cyan">Speed:</span> <span class="lt-magenta">9600 baud</span></span>
+    <span><span class="cyan">Time:</span> <span class="white" id="live-clock">00:00:00</span></span>
+  </div>
+
+  <div class="section-box blue">
+    <span class="section-header blue">MESSAGE BASE - BLOG</span>
+    <div class="section-content">
+      <a href="/" class="back-link">← Back to Main Menu</a>
+      
+      <article class="blog-post">
+        <h1>{post.data.title}</h1>
+        <div class="blog-post-meta">
+          {formatDate(post.data.date)}
+        </div>
+        <div class="blog-post-content">
+          <Content />
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <Footer />
+</BaseLayout>

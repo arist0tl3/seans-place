@@ -1,0 +1,170 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .filter(post => !post.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 5);
+
+function formatDate(date: Date) {
+  return date.toISOString().split('T')[0];
+}
+---
+
+<BaseLayout title="Home">
+  <Header />
+
+  <!-- System Info -->
+  <div class="sysinfo">
+    <span><span class="cyan">SysOp:</span> <span class="yellow">Sean Elliot</span></span>
+    <span><span class="cyan">Node:</span> <span class="lt-green">1 of 1</span></span>
+    <span><span class="cyan">Speed:</span> <span class="lt-magenta">9600 baud</span></span>
+    <span><span class="cyan">Time:</span> <span class="white" id="live-clock">00:00:00</span></span>
+  </div>
+
+  <!-- Marquee -->
+  <div class="marquee-container">
+    <span class="marquee">★★★ CHEF TURNED ENGINEER ★★★ SR. ENGINEERING MANAGER @ STYLESEAT ★★★ LET'S BUILD SOMETHING TOGETHER! ★★★</span>
+  </div>
+
+  <!-- Main Grid -->
+  <div class="panel-grid">
+
+    <!-- Left Column -->
+    <div>
+      <!-- Main Menu -->
+      <div class="section-box magenta" id="menu">
+        <span class="section-header magenta">MAIN MENU</span>
+        <div class="section-content">
+          <a class="menu-item" href="#about"><span class="key">A</span> About the SysOp</a>
+          <a class="menu-item" href="#apps"><span class="key">P</span> Projects / Apps</a>
+          <a class="menu-item" href="#blog"><span class="key">B</span> Blog Posts</a>
+          <a class="menu-item" href="#contact"><span class="key">C</span> Contact Info</a>
+        </div>
+      </div>
+
+      <!-- Visitor Status -->
+      <div class="section-box green">
+        <span class="section-header green">VISITOR STATUS</span>
+        <div class="section-content">
+          <div class="status-row">
+            <span class="status-label">FIRST VISIT:</span>
+            <span class="status-value" id="first-visit">-</span>
+          </div>
+          <div class="status-row">
+            <span class="status-label">LAST VISIT:</span>
+            <span class="status-value" id="last-visit">-</span>
+          </div>
+          <div class="status-row">
+            <span class="status-label">VISIT COUNT:</span>
+            <span class="status-value yellow" id="visit-count">0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column -->
+    <div>
+      <!-- About -->
+      <div class="section-box cyan" id="about">
+        <span class="section-header cyan">ABOUT THE SYSOP</span>
+        <div class="section-content">
+          <p class="about-text">I've spent half my career in kitchens and half in code. Turns out managing a dinner rush and managing a sprint have a lot in common. These days I'm focused on product engineering and building things that solve real problems.</p>
+        </div>
+      </div>
+
+      <!-- ASCII Scene: Monitor + Coffee -->
+      <div class="section-box yellow ascii-scene-box">
+        <span class="section-header yellow">HOME OFFICE</span>
+        <div class="section-content">
+          <pre class="ascii-scene"><span class="lt-cyan">  ┌──────────────────┐</span>       <span class="dk-gray">;</span><span class="white">)</span><span class="dk-gray">(</span> <span class="white">;</span>
+<span class="lt-cyan">  │</span>                  <span class="lt-cyan">│</span>       <span class="brown">:-----:</span>
+<span class="lt-cyan">  │</span>  <span class="lt-green">C:\></span><span class="white">_</span>           <span class="lt-cyan">│</span>      <span class="brown">C|     |</span>
+<span class="lt-cyan">  │</span>                  <span class="lt-cyan">│</span>       <span class="brown">`-----'</span>
+<span class="lt-cyan">  └──────────────────┘</span>        <span class="brown">└───┘</span>
+<span class="dk-gray">  ═════════╤══════════</span>
+<span class="dk-gray">           │</span></pre>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Apps Section -->
+  <div class="section-box red" id="apps">
+    <span class="section-header red">FILE LIBRARY - APPS</span>
+    <div class="section-content">
+      <div class="apps-header">
+        <span class="app-num lt-cyan">#</span>
+        <span class="app-name yellow">NAME</span>
+        <span class="app-desc dk-gray">DESCRIPTION</span>
+        <span class="app-status white">STATUS</span>
+      </div>
+      <a class="app-row" href="/apps/rolo">
+        <span class="app-num">01</span>
+        <span class="app-name">ROLO</span>
+        <span class="app-desc">Personal contact manager & digital rolodex</span>
+        <span class="app-status status-live">● LIVE</span>
+      </a>
+      <a class="app-row" href="/apps/budget">
+        <span class="app-num">02</span>
+        <span class="app-name">BUDGET</span>
+        <span class="app-desc">Zero-based budgeting PWA</span>
+        <span class="app-status status-live">● LIVE</span>
+      </a>
+      <a class="app-row" href="/apps/plateiq">
+        <span class="app-num">03</span>
+        <span class="app-name">PLATEIQ</span>
+        <span class="app-desc">Restaurant analytics SaaS</span>
+        <span class="app-status status-wip">○ WIP</span>
+      </a>
+      <a class="app-row" href="#">
+        <span class="app-num">++</span>
+        <span class="app-name dk-gray">NEW APP</span>
+        <span class="app-desc dk-gray">Coming soon...</span>
+        <span class="app-status status-none">------</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Blog Section -->
+  <div class="section-box blue" id="blog">
+    <span class="section-header blue">MESSAGE BASE - BLOG</span>
+    <div class="section-content">
+      <div class="blog-header">
+        <span class="blog-date cyan">DATE</span>
+        <span class="blog-title white">SUBJECT</span>
+      </div>
+      {posts.map((post) => (
+        <a class="blog-row" href={`/blog/${post.slug}`}>
+          <span class="blog-date">{formatDate(post.data.date)}</span>
+          <span class="blog-title">{post.data.title}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <!-- Contact Section -->
+  <div class="section-box brown" id="contact">
+    <span class="section-header brown">CONTACT SYSOP</span>
+    <div class="section-content">
+      <div class="contact-row">
+        <span class="contact-label">EMAIL:</span>
+        <a class="contact-value" href="mailto:sean@seanelliot.dev">sean@seanelliot.dev</a>
+      </div>
+      <div class="contact-row">
+        <span class="contact-label">GITHUB:</span>
+        <a class="contact-value link" href="https://github.com/arist0tl3" target="_blank" rel="noopener">github.com/arist0tl3</a>
+      </div>
+      <div class="contact-row">
+        <span class="contact-label">LINKEDIN:</span>
+        <a class="contact-value link" href="https://linkedin.com/in/seanelliot" target="_blank" rel="noopener">linkedin.com/in/seanelliot</a>
+      </div>
+    </div>
+  </div>
+
+  <Footer />
+</BaseLayout>

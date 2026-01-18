@@ -1,0 +1,86 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Sean's Place BBS - Chef turned engineer, building things that solve real problems." } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content={description}>
+  <title>{title} | Sean's Place</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+</head>
+<body>
+  <slot />
+  
+  <script>
+    // Live clock
+    function updateClock() {
+      const el = document.getElementById('live-clock');
+      if (!el) return;
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      el.textContent = `${h}:${m}:${s}`;
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // Visitor tracking
+    function formatDate(iso: string) {
+      if (!iso) return '-';
+      const d = new Date(iso);
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+    }
+
+    (function initVisitor() {
+      const firstEl = document.getElementById('first-visit');
+      const lastEl = document.getElementById('last-visit');
+      const countEl = document.getElementById('visit-count');
+      
+      if (!firstEl || !lastEl || !countEl) return;
+
+      const now = new Date().toISOString();
+      let first = localStorage.getItem('bbs_first_visit');
+      let last = localStorage.getItem('bbs_last_visit');
+      let count = parseInt(localStorage.getItem('bbs_visit_count') || '0', 10);
+
+      if (!first) {
+        first = now;
+        localStorage.setItem('bbs_first_visit', first);
+      }
+
+      count++;
+      localStorage.setItem('bbs_visit_count', count.toString());
+
+      firstEl.textContent = formatDate(first);
+      lastEl.textContent = last ? formatDate(last) : 'First time!';
+      countEl.textContent = count.toString();
+
+      localStorage.setItem('bbs_last_visit', now);
+    })();
+
+    // Keyboard shortcuts (only on homepage)
+    if (window.location.pathname === '/') {
+      document.addEventListener('keydown', (e) => {
+        const k = e.key.toLowerCase();
+        const targets: Record<string, string> = { a: 'about', p: 'apps', b: 'blog', c: 'contact' };
+        if (targets[k] && !e.ctrlKey && !e.metaKey && !e.altKey) {
+          e.preventDefault();
+          document.getElementById(targets[k])?.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    }
+  </script>
+</body>
+</html>
