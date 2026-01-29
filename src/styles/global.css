@@ -265,6 +265,22 @@ body {
   text-align: right;
 }
 
+.app-links {
+  display: flex;
+  gap: 12px;
+  width: 120px;
+  justify-content: flex-end;
+}
+
+.app-links a {
+  color: var(--light-cyan);
+  text-decoration: none;
+}
+
+.app-links a:hover {
+  text-decoration: underline;
+}
+
 .status-live { color: var(--light-green); }
 .status-wip { color: var(--light-magenta); }
 .status-none { color: var(--dark-gray); }
@@ -475,6 +491,15 @@ body {
 
   .app-desc {
     display: none;
+  }
+
+  .app-status {
+    width: 60px;
+  }
+
+  .app-links {
+    width: auto;
+    gap: 8px;
   }
 
   .blog-date {
