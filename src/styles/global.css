@@ -499,7 +499,9 @@ body {
 
   .app-links {
     width: auto;
-    gap: 8px;
+    gap: 12px;
+    margin-left: auto;
+    justify-content: flex-end;
   }
 
   .blog-date {
