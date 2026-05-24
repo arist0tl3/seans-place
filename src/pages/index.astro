@@ -2,16 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { getCollection } from 'astro:content';
-
-const posts = (await getCollection('blog'))
-  .filter(post => !post.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 5);
-
-function formatDate(date: Date) {
-  return date.toISOString().split('T')[0];
-}
 ---
 
 <BaseLayout title="Home">
@@ -41,7 +31,6 @@ function formatDate(date: Date) {
         <div class="section-content">
           <a class="menu-item" href="#about"><span class="key">A</span> About the SysOp</a>
           <a class="menu-item" href="#apps"><span class="key">P</span> Projects / Apps</a>
-          <a class="menu-item" href="#blog"><span class="key">B</span> Blog Posts</a>
           <a class="menu-item" href="#contact"><span class="key">C</span> Contact Info</a>
         </div>
       </div>
@@ -135,27 +124,19 @@ function formatDate(date: Date) {
       </div>
       <div class="app-row">
         <span class="app-num">04</span>
+        <span class="app-name">TRIP CALENDAR</span>
+        <span class="app-desc">Chrome extension showing a calendar view of upcoming bnb stays</span>
+        <span class="app-status status-live">LIVE</span>
+        <span class="app-links">
+          <a href="https://github.com/arist0tl3/trip-calendar" rel="noreferrer" target="_blank">Repo</a>
+        </span>
+      </div>
+      <div class="app-row">
+        <span class="app-num">05</span>
         <span class="app-name">RESTAURANT ANALYTICS</span>
         <span class="app-desc">Analytics dashboard for restaurants</span>
         <span class="app-status status-wip">○ WIP</span>
       </div>
-    </div>
-  </div>
-
-  <!-- Blog Section -->
-  <div class="section-box blue" id="blog">
-    <span class="section-header blue">MESSAGE BASE - BLOG</span>
-    <div class="section-content">
-      <div class="blog-header">
-        <span class="blog-date cyan">DATE</span>
-        <span class="blog-title white">SUBJECT</span>
-      </div>
-      {posts.map((post) => (
-        <a class="blog-row" href={`/blog/${post.slug}`}>
-          <span class="blog-date">{formatDate(post.data.date)}</span>
-          <span class="blog-title">{post.data.title}</span>
-        </a>
-      ))}
     </div>
   </div>
 
